@@ -1,0 +1,15 @@
+{
+  "type": "module",
+  "name": "domo_export",
+  "description": "Export Domo pages as PDF",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node ."
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "isomorphic-unfetch": "^3.1.0",
+    "puppeteer": "^1.20.0"
+  }
+}
