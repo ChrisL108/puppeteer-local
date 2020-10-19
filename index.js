@@ -5,16 +5,40 @@ import fetch from "isomorphic-unfetch";
 import fs from "fs";
 
 (async () => {
+  let currPageUrl;
   const browser = await puppeteer.launch({
     // userDataDir: "./puppeteer",
     // args: ["--no-sandbox"],
     // dumpio: true,
     headless: false,
-    slowMo: 15,
+    slowMo: 5,
     timeout: 0,
   });
   let page = await browser.newPage();
+
+  /**
+   ** EVENT HANDLERS
+   */
+  // browser.on("targetchanged", (e) => {
+  //   console.log("browser target changed, e: ", e);
+  //   currPageUrl = e.url();
+  // });
+
+  // await page.setRequestInterception(true);
+  let requestUrl;
+  page.on("request", (request) => {
+    requestUrl = request.url();
+    if (requestUrl.includes("pdf"))
+      console.log('on("request"), pdf request.url()');
+    // return;
+  });
+
   try {
+    // await page._client.send("Page.setDownloadBehavior", {
+    //   behavior: "allow",
+    //   downloadPath: "./reports",
+    // });
+
     await page.goto("https://tbicom.domo.com/auth");
     await page.waitForSelector("a[class=ng-binding]");
     await page.click("a[class=ng-binding]");
@@ -23,7 +47,7 @@ import fs from "fs";
     await page.type("input[name=password]", process.env.domo_password);
     await page.click("button[name=submit]");
     await page.waitForSelector("div[app-info=appInfo]");
-    await page.goto(process.env.domo_page_insights);
+    await page.goto(process.env.domo_page_insights, { timeout: 45000 });
 
     console.log("finding dropdown button for filters");
 
@@ -106,14 +130,14 @@ import fs from "fs";
         await page.waitForTimeout(1000);
         if (downloadButton) {
           console.log("downloadButton found!");
-          // await downloadButton.click();
+          await downloadButton.click();
           // TODO test event: 'popup'
-          const [response] = await Promise.all([
-            page.waitForNavigation(), // This will set the promise to wait for navigation events
-            await downloadButton.click(), // After clicking the submi
-            // Then the page will be send POST and navigate to target page
-          ]);
-          console.log("Promise.all() response: ", response);
+          // const [response] = await Promise.all([
+          //   page.waitForNavigation(), // This will set the promise to wait for navigation events
+          //   await downloadButton.click(), // After clicking the submi
+          //   // Then the page will be send POST and navigate to target page
+          // ]);
+          // console.log("Promise.all() response: ", response);
         }
 
         // await page.waitForNavigation({
@@ -122,18 +146,32 @@ import fs from "fs";
         await page.waitForTimeout(5000);
 
         // await page.emulateMediaType("screen");
+        const pages = await browser.pages();
+
+        // await page.tab
         // await page.pdf({ path: "html-page.pdf", format: "A4" });
+        console.log("# of pages: ", pages.length);
+        console.log("last page url: ", pages[pages.length - 1].url());
+        // const currPdfUrl = page.url();
+        // console.log("initial page url: ", currPdfUrl);
+        // console.log("targetchanged page url: ", currPageUrl);
 
-        const currPdfUrl = page.url();
-        console.log("currPdfUrl: ", currPdfUrl);
+        await page.goto(pages[pages.length - 1].url());
+        // await page.emulateMediaType("screen");
+        // await page.pdf({ path: "html-page.pdf" });
+        const pageContent = await page.content();
 
-        const pdfFetch = await fetch(currPdfUrl, {
-          headers: {
-            "Content-Type": "application/pdf",
-          },
-        });
-        const pdfData = await pdfFetch.text();
-        console.log(pdfData.substring(0, 500));
+        console.log('pageContent: ', pageContent);
+        res.send(pageContent)
+
+        // const pdfFetch = await fetch(pages[pages.length - 1].url(), {
+        //   credentials: "include",
+        //   headers: {
+        //     "Content-Type": "application/pdf",
+        //   },
+        // });
+        // const pdfData = await pdfFetch.text();
+        // console.log(pdfData.substring(0, 500));
       }
     }
 
