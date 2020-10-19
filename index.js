@@ -1,4 +1,5 @@
-require('dotenv').config()
+import dotenv from "dotenv";
+dotenv.config();
 import puppeteer from "puppeteer";
 import fetch from "isomorphic-unfetch";
 import fs from "fs";
@@ -71,15 +72,18 @@ import fs from "fs";
       if (filterInputName) {
         console.log("filter input box found");
         await page.type(filterPartnerNameSelector, TEST_PARTNER);
+
         // wait for filtered results to populate
         await page.waitFor(5000);
+
         // select first result
         await page.keyboard.press("Tab");
         await page.keyboard.press("Tab");
         await page.keyboard.press("Space");
         await page.keyboard.press("Enter");
 
-        await page.waitFor(3000);
+        // wait for partner filter to be applied
+        await page.waitFor(7000);
 
         const shareIcon = await page.waitForSelector(
           'i[class="icon-arrow-box _24"'
@@ -142,3 +146,48 @@ import fs from "fs";
     await browser.close();
   }
 })();
+
+/**
+ *
+ * @param {any} page
+ * @param {string} url
+ * @param {string} fullpath
+ */
+async function downloadImage(page, url, fullpath) {
+  const data = await page.evaluate(
+    // tslint:disable-next-line no-shadowed-variable
+    async ({ url }) => {
+      function readAsBinaryStringAsync(blob) {
+        return new Promise((resolve, reject) => {
+          const fr = new FileReader();
+          fr.readAsBinaryString(blob);
+          fr.onload = () => {
+            resolve(fr.result);
+          };
+        });
+      }
+
+      const r = await fetch(url, {
+        credentials: "include",
+        headers: {
+          accept:
+            "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp, */*;q=0.8",
+          "cache-control": "no-cache",
+          pragma: "no-cache",
+          "sec-fetch-mode": "navigate",
+          "sec-fetch-site": "same-site",
+          "upgrade-insecure-requests": "1",
+        },
+        referrerPolicy: "no-referrer-when-downgrade",
+        body: null,
+        method: "GET",
+        mode: "cors",
+      });
+
+      return await readAsBinaryStringAsync(await r.blob());
+    },
+    { url }
+  );
+
+  fs.writeFileSync(fullpath, data, { encoding: "binary" });
+}
