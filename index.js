@@ -50,7 +50,7 @@ import fs from "fs";
       console.log("Opening filters...");
       const openFilters = await page.waitForSelector(filtersOpen);
       openFilters.click();
-      await page.waitFor(2500);
+      await page.waitForTimeout(2500);
     }
 
     // TODO REMOVE ------------------
@@ -74,7 +74,7 @@ import fs from "fs";
         await page.type(filterPartnerNameSelector, TEST_PARTNER);
 
         // wait for filtered results to populate
-        await page.waitFor(5000);
+        await page.waitForTimeout(5000);
 
         // select first result
         await page.keyboard.press("Tab");
@@ -83,7 +83,7 @@ import fs from "fs";
         await page.keyboard.press("Enter");
 
         // wait for partner filter to be applied
-        await page.waitFor(7000);
+        await page.waitForTimeout(7000);
 
         const shareIcon = await page.waitForSelector(
           'i[class="icon-arrow-box _24"'
@@ -94,8 +94,8 @@ import fs from "fs";
           "//div[contains(text(),'Export as PDF')]"
         );
         exportButton.click();
-        // await page.waitFor(15000);
-        // await page.waitFor(1000);
+        // await page.waitForTimeout(15000);
+        // await page.waitForTimeout(1000);
 
         const downloadButton = await page.waitForXPath(
           "//button[contains(text(),'Download')]",
@@ -103,7 +103,7 @@ import fs from "fs";
             timeout: 0,
           }
         );
-        await page.waitFor(1000);
+        await page.waitForTimeout(1000);
         if (downloadButton) {
           console.log("downloadButton found!");
           // await downloadButton.click();
@@ -119,7 +119,7 @@ import fs from "fs";
         // await page.waitForNavigation({
         //   waitUntil: "load",
         // });
-        await page.waitFor(5000);
+        await page.waitForTimeout(5000);
 
         // await page.emulateMediaType("screen");
         // await page.pdf({ path: "html-page.pdf", format: "A4" });
