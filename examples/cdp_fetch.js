@@ -66,7 +66,11 @@ const puppeteer = require("puppeteer");
       /*
         Fetch.getResponseBody
         https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#method-getResponseBody
-        Causes the body of the response to be received from the server and returned as a single string. May only be issued for a request that is paused in the Response stage and is mutually exclusive with takeResponseBodyForInterceptionAsStream. Calling other methods that affect the request or disabling fetch domain before body is received results in an undefined behavior.
+        Causes the body of the response to be received from the server and returned as a single string. 
+        May only be issued for a request that is paused in the Response stage and 
+          is mutually exclusive with takeResponseBodyForInterceptionAsStream. 
+        Calling other methods that affect the request or disabling fetch 
+          domain before body is received results in an undefined behavior.
       */
       const responseObj = await client.send("Fetch.getResponseBody", {
         requestId,

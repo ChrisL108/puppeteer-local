@@ -1,0 +1,74 @@
+{
+    "requestId": "interception-job-1.0",
+    "request": {
+        "url": "https://tbicom.domo.com/api/content/v1/export/pages/1569356898/layouts/pdf?scale=4",
+        "method": "POST",
+        "headers": {
+            "Sec-Fetch-Mode": "cors",
+            "Accept-Language": "en",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3882.0 Safari/537.36",
+            "Content-Type": "application/json;charset=UTF-8",
+            "Accept": "application/json, text/plain, */*",
+            "X-DOMO-RequestContext": "{\"clientToe\":\"2K5QSIEHVN-2EI4R\"}",
+            "x-requested-with": "XMLHttpRequest",
+            "Referer": "https://tbicom.domo.com/page/1569356898"
+        },
+        "postData": "{\"beacon\":1239625352,\"filters\":[{\"column\":\"calculation_aec07493-59ed-440b-b2f5-6a8b63b5c111\",\"operand\":\"IN\",\"values\":[\"2 Years Ago\"],\"dataType\":\"string\",\"label\":\"Year Flag - Single Date\",\"dataSourceId\":\"b1b80258-8310-4f0c-8380-4ade59cfa204\"}],\"filterGroupIds\":[],\"chartStates\":[]}",
+        "initialPriority": "High",
+        "referrerPolicy": "no-referrer-when-downgrade"
+    },
+    "frameId": "47CF2C47938BD4D35FF37EC6F5008C26",
+    "resourceType": "XHR",
+    "responseStatusCode": 202,
+    "responseHeaders": [
+        {
+            "name": "status",
+            "value": "202"
+        },
+        {
+            "name": "server",
+            "value": "nginx"
+        },
+        {
+            "name": "date",
+            "value": "Wed, 28 Oct 2020 22:40:51 GMT"
+        },
+        {
+            "name": "content-length",
+            "value": "0"
+        },
+        {
+            "name": "cache-control",
+            "value": "no-cache, no-store, max-age=0, must-revalidate"
+        },
+        {
+            "name": "expires",
+            "value": "0"
+        },
+        {
+            "name": "pragma",
+            "value": "no-cache"
+        },
+        {
+            "name": "vary",
+            "value": "Accept-Encoding, User-Agent"
+        },
+        {
+            "name": "x-content-type-options",
+            "value": "nosniff"
+        },
+        {
+            "name": "x-frame-options",
+            "value": "DENY"
+        },
+        {
+            "name": "x-xss-protection",
+            "value": "1; mode=block"
+        },
+        {
+            "name": "strict-transport-security",
+            "value": "max-age=31536000; includeSubDomains"
+        }
+    ],
+    "networkId": "1000021816.704"
+}
